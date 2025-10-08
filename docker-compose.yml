@@ -1,0 +1,37 @@
+
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-university
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_DATABASE: University
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - university-network
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin-university
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: ''
+    ports:
+      - '8080:80'
+    depends_on:
+      - mysql
+    networks:
+      - university-network
+
+volumes:
+  mysql_data:
+
+networks:
+  university-network:
+    driver: bridge
